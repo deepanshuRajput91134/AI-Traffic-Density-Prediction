@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from routes.traffic import router as traffic_router
+from routes.routes import router as routes_router
 
 app = FastAPI(
     title="AI Traffic Density Prediction API",
@@ -24,3 +25,4 @@ def health_check():
 
 
 app.include_router(traffic_router)
+app.include_router(routes_router)
