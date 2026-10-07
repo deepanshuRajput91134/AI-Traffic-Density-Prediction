@@ -48,6 +48,8 @@ class TrafficInput(BaseModel):
 # -----------------------------
 # Traffic status
 # -----------------------------
+# Traffic status & model info
+# -----------------------------
 @router.get("/status")
 def traffic_status():
     m, _ = get_model_and_encoder() if os.path.exists(MODEL_PATH) else (None, None)
@@ -55,6 +57,24 @@ def traffic_status():
         "status": "success",
         "message": "Traffic module is active",
         "model_loaded": m is not None
+    }
+
+
+@router.get("/model-info")
+def get_model_info():
+    metadata_path = BASE_DIR / "ai-model" / "model_metadata.json"
+    if not os.path.exists(metadata_path):
+        return {
+            "status": "partial",
+            "model_name": "Traffic Density Random Forest Classifier",
+            "features": ["vehicle_count", "average_speed", "road_capacity"]
+        }
+    with open(metadata_path, "r", encoding="utf-8") as f:
+        import json
+        data = json.load(f)
+    return {
+        "status": "success",
+        "data": data
     }
 
 

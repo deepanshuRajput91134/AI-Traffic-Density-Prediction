@@ -1,0 +1,115 @@
+{
+  "model_name": "Traffic Density Random Forest Classifier",
+  "algorithm": "Random Forest",
+  "version": "2.0.0",
+  "trained_at_utc": "2026-10-07T19:23:43.021278+00:00",
+  "dataset_name": "traffic_data.csv",
+  "dataset_rows": 2000,
+  "feature_names": [
+    "vehicle_count",
+    "average_speed",
+    "road_capacity"
+  ],
+  "target_classes": [
+    "High",
+    "Low",
+    "Medium"
+  ],
+  "feature_importances": {
+    "vehicle_count": 0.4237,
+    "average_speed": 0.4841,
+    "road_capacity": 0.0922
+  },
+  "benchmark_comparison": {
+    "Random Forest": {
+      "cv_f1_mean": 0.9679,
+      "cv_f1_std": 0.006,
+      "test_accuracy": 0.97,
+      "test_precision_macro": 0.9668,
+      "test_recall_macro": 0.9684,
+      "test_f1_macro": 0.9674
+    },
+    "Decision Tree": {
+      "cv_f1_mean": 0.9126,
+      "cv_f1_std": 0.0128,
+      "test_accuracy": 0.93,
+      "test_precision_macro": 0.9246,
+      "test_recall_macro": 0.9224,
+      "test_f1_macro": 0.9234
+    },
+    "Logistic Regression": {
+      "cv_f1_mean": 0.9735,
+      "cv_f1_std": 0.0085,
+      "test_accuracy": 0.985,
+      "test_precision_macro": 0.9833,
+      "test_recall_macro": 0.9833,
+      "test_f1_macro": 0.9833
+    },
+    "Gradient Boosting": {
+      "cv_f1_mean": 0.9616,
+      "cv_f1_std": 0.0065,
+      "test_accuracy": 0.965,
+      "test_precision_macro": 0.9615,
+      "test_recall_macro": 0.9615,
+      "test_f1_macro": 0.9615
+    }
+  },
+  "confusion_matrix": {
+    "classes": [
+      "High",
+      "Low",
+      "Medium"
+    ],
+    "matrix": [
+      [
+        162,
+        0,
+        3
+      ],
+      [
+        0,
+        125,
+        5
+      ],
+      [
+        3,
+        1,
+        101
+      ]
+    ]
+  },
+  "classification_report": {
+    "High": {
+      "precision": 0.9818181818181818,
+      "recall": 0.9818181818181818,
+      "f1-score": 0.9818181818181818,
+      "support": 165.0
+    },
+    "Low": {
+      "precision": 0.9920634920634921,
+      "recall": 0.9615384615384616,
+      "f1-score": 0.9765625,
+      "support": 130.0
+    },
+    "Medium": {
+      "precision": 0.926605504587156,
+      "recall": 0.9619047619047619,
+      "f1-score": 0.9439252336448598,
+      "support": 105.0
+    },
+    "accuracy": 0.97,
+    "macro avg": {
+      "precision": 0.96682905948961,
+      "recall": 0.9684204684204684,
+      "f1-score": 0.9674353051543472,
+      "support": 400.0
+    },
+    "weighted avg": {
+      "precision": 0.9706545798747633,
+      "recall": 0.97,
+      "f1-score": 0.9701631863317758,
+      "support": 400.0
+    }
+  },
+  "academic_disclosure": "Model trained and evaluated on 2,000-sample benchmark dataset using Stratified 5-Fold Cross-Validation. The reported ~97% accuracy reflects synthetic benchmark partition performance. In real-world municipal deployment, model performance must be calibrated against induction-loop sensors and CCTV telemetry."
+}
