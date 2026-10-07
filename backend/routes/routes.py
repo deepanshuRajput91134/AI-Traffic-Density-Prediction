@@ -1,9 +1,17 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
+from typing import Dict, Optional, List
 import joblib
 import pandas as pd
 from pathlib import Path
 import os
+
+from app.database import insert_route_record, get_route_history
+from app.services.routing_service import (
+    find_k_shortest_paths,
+    get_city_network_metadata,
+    CITY_NODES
+)
 
 router = APIRouter(
     prefix="/routes",
@@ -36,7 +44,7 @@ except Exception:
 
 
 # =============================
-# Route Optimization Schemas
+# Schemas
 # =============================
 class RouteInput(BaseModel):
     route_a_time: float = Field(..., gt=0, description="Estimated time for Route A (minutes)")
@@ -59,22 +67,93 @@ class SmartRouteInput(BaseModel):
     route_c_time: float = Field(..., gt=0, description="Base travel time for Route C (minutes)")
 
 
+class GraphRouteRequest(BaseModel):
+    origin: str = Field(default="N1", description="Origin Node ID (e.g., N1 for Central City Center)")
+    destination: str = Field(default="N6", description="Destination Node ID (e.g., N6 for International Airport)")
+    density_overrides: Optional[Dict[str, str]] = Field(default=None, description="Optional road segment density overrides")
+
+
 # =============================
-# Traffic Density Scoring Helper
+# Helper
 # =============================
 def density_score(density: str) -> int:
-    clean_density = str(density).strip().lower()
-    if clean_density == "low":
+    clean = str(density).strip().lower()
+    if clean == "low":
         return 1
-    elif clean_density == "medium":
+    elif clean == "medium":
         return 2
-    elif clean_density == "high":
+    elif clean == "high":
         return 3
     return 2
 
 
 # =============================
-# Endpoint: Heuristic Route Optimization
+# City Road Network Endpoint
+# =============================
+@router.get("/network")
+def city_road_network():
+    """Returns city road graph nodes and segments for Leaflet map visualization."""
+    return {
+        "status": "success",
+        "network": get_city_network_metadata()
+    }
+
+
+# =============================
+# Graph-Based Dijkstra Optimizer (Primary New Engine)
+# =============================
+@router.post("/graph-optimize")
+def graph_optimize_route(req: GraphRouteRequest):
+    """
+    Computes optimal and alternative routes across the city graph network
+    using Multi-Attribute Dijkstra Pathfinding.
+    """
+    try:
+        routes = find_k_shortest_paths(
+            origin=req.origin,
+            destination=req.destination,
+            k=3,
+            density_overrides=req.density_overrides
+        )
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
+
+    if not routes:
+        raise HTTPException(status_code=404, detail="No feasible route found between selected points.")
+
+    best_route = routes[0]
+    alternatives = routes[1:] if len(routes) > 1 else []
+
+    # Persist in SQLite
+    try:
+        origin_name = CITY_NODES[req.origin]["name"]
+        dest_name = CITY_NODES[req.destination]["name"]
+        insert_route_record(
+            origin=origin_name,
+            destination=dest_name,
+            recommended_route=best_route["route_name"],
+            travel_time=best_route["estimated_travel_time"],
+            route_score=best_route["route_score"],
+            traffic_density=best_route["traffic_density"],
+            alternative_routes=alternatives,
+            recommendation_reason=best_route["reason"]
+        )
+    except Exception as db_err:
+        print(f"Route log warning: {db_err}")
+
+    return {
+        "status": "success",
+        "algorithm": "Dijkstra Multi-Attribute Shortest Path",
+        "origin": CITY_NODES[req.origin],
+        "destination": CITY_NODES[req.destination],
+        "recommended_route": best_route,
+        "alternative_routes": alternatives,
+        "all_ranked_routes": routes
+    }
+
+
+# =============================
+# Backward Compatible: Heuristic Route Optimization
 # =============================
 @router.post("/optimize")
 def optimize_route(data: RouteInput):
@@ -101,19 +180,30 @@ def optimize_route(data: RouteInput):
 
     for route in routes:
         route["density_score"] = density_score(route["traffic_density"])
-        # Score = Travel Time + (Density Penalty Factor * 5)
         route["route_score"] = round(route["travel_time"] + (route["density_score"] * 5), 2)
 
-    # Sort routes by score ascending (lowest score is best)
     sorted_routes = sorted(routes, key=lambda x: x["route_score"])
     best_route = sorted_routes[0]
 
-    # Generate explanatory justification
     reason = (
         f"Selected {best_route['route']} ({best_route['corridor_type']}) due to optimal balance "
         f"of travel time ({best_route['travel_time']} min) and {best_route['traffic_density']} traffic density "
         f"(Composite Score: {best_route['route_score']})."
     )
+
+    try:
+        insert_route_record(
+            origin="Downtown Hub",
+            destination="Airport Expressway",
+            recommended_route=best_route["route"],
+            travel_time=best_route["travel_time"],
+            route_score=best_route["route_score"],
+            traffic_density=best_route["traffic_density"],
+            alternative_routes=sorted_routes[1:],
+            recommendation_reason=reason
+        )
+    except Exception as e:
+        print(f"Warning: Failed to log route: {e}")
 
     return {
         "status": "success",
@@ -127,7 +217,7 @@ def optimize_route(data: RouteInput):
 
 
 # =============================
-# Endpoint: ML-Driven Smart Route Optimization
+# Backward Compatible: ML + Route Optimization
 # =============================
 @router.post("/smart-predict")
 def smart_predict(data: SmartRouteInput):
@@ -136,7 +226,6 @@ def smart_predict(data: SmartRouteInput):
     except Exception as exc:
         raise HTTPException(status_code=503, detail=f"ML Model unavailable: {str(exc)}")
 
-    # Prepare input for ML model
     input_data = pd.DataFrame([
         {
             "vehicle_count": data.vehicle_count,
@@ -149,10 +238,6 @@ def smart_predict(data: SmartRouteInput):
     predicted_density = active_encoder.inverse_transform(prediction)[0]
     base_traffic_score = density_score(predicted_density)
 
-    # Real-world corridor sensitivity factors:
-    # Route A (Main Arterial): High sensitivity to sector congestion (multiplier 1.4)
-    # Route B (Expressway Bypass): Medium sensitivity (multiplier 1.0)
-    # Route C (Outer Ring Road): Low sensitivity (multiplier 0.7)
     corridors = {
         "Route A": {
             "name": "Main Arterial Avenue",
@@ -175,7 +260,6 @@ def smart_predict(data: SmartRouteInput):
     detailed_routes = []
 
     for route_id, info in corridors.items():
-        # Congestion penalty scales dynamically with both predicted density and corridor sensitivity
         congestion_penalty = round(base_traffic_score * 5.0 * info["congestion_sensitivity"], 2)
         total_score = round(info["base_time"] + congestion_penalty, 2)
         route_scores[route_id] = total_score
@@ -187,7 +271,6 @@ def smart_predict(data: SmartRouteInput):
             "total_route_score": total_score
         })
 
-    # Recommended route has the lowest composite score
     detailed_routes.sort(key=lambda x: x["total_route_score"])
     recommended_route = detailed_routes[0]["route"]
 
