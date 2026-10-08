@@ -516,11 +516,12 @@ def create_deck(output_path):
     ], CARD_GREEN)
 
     add_card(s12, 6.8, 1.8, 5.6, 5.0, "Future Scope for Final Year", [
-        "1. Real-Time IoT Sensor Integration: Ingest live ultrasonic and inductive loop traffic sensors.",
-        "2. GPS & GIS Mapping: Integrate Mapbox / OpenStreetMap with live geolocation polyline routes.",
-        "3. Deep Learning Upgrade: Deploy YOLOv8 for multi-class vehicle detection on camera streams.",
-        "4. Smart Traffic Signal Automation: Dynamic signal timer adjustment based on queue length.",
-        "5. Cloud Deployment: Deploy on AWS EC2 / Render with automated CI/CD pipelines."
+        "1. Commuter Mobile App: Cross-platform Flutter / React Native app for live turn-by-turn navigation & jam alerts.",
+        "2. Real-Time IoT Sensors: Ingest ultrasonic & inductive loop detectors via WebSockets.",
+        "3. Live GIS Maps: Integrate Mapbox / OpenStreetMap with real-time GPS routing.",
+        "4. Deep Learning Vision: Deploy YOLOv8 on CCTV streams for multi-class vehicle tracking.",
+        "5. Adaptive Signal Control: Automated dynamic signal timing based on congestion density.",
+        "6. Emergency Green Corridor: Automated lane clearance for ambulances & fire brigades."
     ], PRIMARY)
 
     prs.save(output_path)

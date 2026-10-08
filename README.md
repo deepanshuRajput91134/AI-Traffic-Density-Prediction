@@ -296,6 +296,17 @@ docker-compose up --build -d
 
 ---
 
+## 🔮 Future Scope & Roadmap (Final Year)
+
+- 📱 **Cross-Platform Mobile App:** Flutter / React Native commuter app for turn-by-turn AI navigation and real-time jam alerts.
+- 🚑 **Emergency Vehicle Green Corridor:** Automated signal synchronization to clear lanes for ambulances and fire engines.
+- 📡 **Real-Time IoT Sensors:** Live data ingestion from ultrasonic and inductive loop traffic sensors via WebSockets.
+- 🗺️ **GIS & GPS Navigation:** Mapbox / OpenStreetMap integration with live traffic heatmaps.
+- 👁️ **Edge AI Vision (YOLOv8):** CCTV stream vehicle classification and automated license plate recognition (ALPR).
+- 🚦 **Adaptive Traffic Signals:** Dynamic traffic light phase switching using Reinforcement Learning.
+
+---
+
 ## 👨‍💻 Team
 
 <div align="center">
