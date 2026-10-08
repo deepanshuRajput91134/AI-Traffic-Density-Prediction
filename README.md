@@ -303,7 +303,7 @@ docker-compose up --build -d
 | 🟢 Deepanshu Kumar | 🟡 Kaushal Kumar | 🔴 Ayush Dwivedi | 🔵 Sachin Kashyap |
 |:------------------:|:----------------:|:----------------:|:-----------------:|
 | **ML Model & Dataset Preparation** | **Backend API & Integration** | **Frontend Development** | **Documentation & Presentation** |
-| [@deepanshuRajput91134](https://github.com/deepanshuRajput91134) | Kaushal Kumar | Ayush Dwivedi | Sachin Kashyap |
+| [@deepanshuRajput91134](https://github.com/deepanshuRajput91134)<br>*(Roll No: 2401431530021)* | Kaushal Kumar<br>*(Roll No: 2401431530036)* | Ayush Dwivedi<br>*(Roll No: 2401431530015)* | Sachin Kashyap<br>*(Roll No: 2401431530051)* |
 | Trained & benchmarked RF, DT, LR, GB models. Curated dataset, feature engineering, cross-validation. | Built FastAPI backend, all REST endpoints, SQLite persistence, Dijkstra routing service. | Designed React dashboard with tabs, API integration, real-time data display. | Created project report, presentation slides, README and deployment documentation. |
 
 </div>
