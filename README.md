@@ -18,6 +18,7 @@
 ## 📌 Table of Contents
 - [Overview](#-overview)
 - [Features](#-features)
+- [Team](#-team)
 - [Architecture](#-architecture)
 - [Tech Stack](#-tech-stack)
 - [Quick Start](#-quick-start)
@@ -295,13 +296,23 @@ docker-compose up --build -d
 
 ---
 
-## 👨‍💻 Author
+## 👨‍💻 Team
 
-**Deepanshu Rajput**
-- 3rd Year B.Tech (CSE/AI) Student
-- GitHub: [@deepanshuRajput91134](https://github.com/deepanshuRajput91134)
+<div align="center">
+
+| 🟢 Deepanshu Kumar | 🟡 Kaushal Kumar | 🔴 Ayush Dwivedi | 🔵 Sachin Kashyap |
+|:------------------:|:----------------:|:----------------:|:-----------------:|
+| **ML Model & Dataset Preparation** | **Backend API & Integration** | **Frontend Development** | **Documentation & Presentation** |
+| [@deepanshuRajput91134](https://github.com/deepanshuRajput91134) | Kaushal Kumar | Ayush Dwivedi | Sachin Kashyap |
+| Trained & benchmarked RF, DT, LR, GB models. Curated dataset, feature engineering, cross-validation. | Built FastAPI backend, all REST endpoints, SQLite persistence, Dijkstra routing service. | Designed React dashboard with tabs, API integration, real-time data display. | Created project report, presentation slides, README and deployment documentation. |
+
+</div>
+
+**Institution:** B.Tech 3rd Year — Computer Science / AI
+**Project Type:** Academic Minor Project
 
 ---
+
 
 ## 📄 License
 
