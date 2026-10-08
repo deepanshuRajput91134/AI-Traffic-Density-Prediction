@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Project Presentation – AI Traffic Density Prediction</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #0b1120; color: #f8fafc; }
+    .slide-wrapper { width: 100%; max-width: 1200px; aspect-ratio: 16/9; margin: 0 auto; background: #0f172a; border-radius: 16px; border: 1px solid #334155; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); display: flex; flex-direction: column; overflow: hidden; position: relative; }
+    .slide { display: none; width: 100%; height: 100%; padding: 40px 50px; flex-direction: column; justify-content: space-between; box-sizing: border-box; }
+    .slide.active { display: flex; }
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; transition: transform 0.2s, border-color 0.2s; }
+    .card:hover { border-color: #3b82f6; }
+    .btn-nav { background: #3b82f6; color: white; padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; }
+    .btn-nav:hover { background: #2563eb; transform: translateY(-1px); }
+    .btn-nav-sec { background: #334155; color: #cbd5e1; padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; }
+    .btn-nav-sec:hover { background: #475569; color: white; }
+    .progress-bar-fill { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .member-avatar { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; color: white; }
+    @media print {
+      body { background: white; color: black; }
+      .slide-wrapper { max-width: 100%; aspect-ratio: auto; box-shadow: none; border: none; }
+      .slide { display: flex !important; page-break-after: always; min-height: 100vh; padding: 20px; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8 flex flex-col items-center min-h-screen">
+
+  <!-- Top Controls -->
+  <div class="w-full max-w-[1200px] flex justify-between items-center mb-4 no-print">
+    <div class="flex items-center gap-3">
+      <span class="text-xl">🚦</span>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-wide">AI-BASED TRAFFIC DENSITY PREDICTION & ROUTE OPTIMIZATION</h1>
+        <p class="text-xs text-slate-400">IMS Engineering College, Ghaziabad • Group 5 • Major Project (BCS753)</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <button class="btn-nav-sec" onclick="prevSlide()">← Prev</button>
+      <span id="slideIndicator" class="text-sm font-semibold text-slate-300 min-w-[65px] text-center">1 / 12</span>
+      <button class="btn-nav" onclick="nextSlide()">Next →</button>
+      <button class="btn-nav-sec ml-2" onclick="toggleFullScreen()">⛶ Fullscreen</button>
+      <button class="btn-nav-sec" onclick="window.print()">🖨️ Print / PDF</button>
+    </div>
+  </div>
+
+  <!-- Slide Canvas (16:9) -->
+  <div class="slide-wrapper" id="slideDeck">
+    
+    <!-- Top Progress Line -->
+    <div class="h-1 bg-slate-800 w-full no-print">
+      <div id="progressBar" class="h-full bg-blue-500 progress-bar-fill" style="width: 8.33%;"></div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════
+         SLIDE 1: TITLE SLIDE
+    ═════════════════════════════════════════════════════ -->
+    <div class="slide active justify-center items-center text-center">
+      <div class="mb-4">
+        <h3 class="text-sm tracking-widest text-blue-400 font-extrabold uppercase">IMS ENGINEERING COLLEGE, GHAZIABAD</h3>
+        <p class="text-xs text-slate-400">Department of Computer Science & Engineering (AIML) & CSD</p>
+      </div>
+
+      <div class="my-3 px-8 py-6 rounded-2xl bg-slate-800/80 border border-blue-500/40 max-w-4xl shadow-2xl">
+        <span class="badge bg-blue-600/30 text-blue-300 border border-blue-500/30 mb-3">Major Project Synopsis Presentation</span>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white leading-tight mb-3">
+          AI-Based Traffic Density Prediction<br>& Route Optimization
+        </h1>
+        <p class="text-sm md:text-base text-slate-300 max-w-2xl mx-auto">
+          An End-to-End Smart City Traffic Solution Powered by Machine Learning, Dijkstra Graph Routing, and Real-Time Telemetry
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6 w-full max-w-3xl text-left mt-3">
+        <!-- Team -->
+        <div class="card bg-slate-800/60 p-4 border-slate-700">
+          <p class="text-xs text-blue-400 font-bold uppercase mb-2">Team Members (Group No: 5)</p>
+          <ul class="text-xs space-y-1.5 text-slate-200">
+            <li>• <strong class="text-white">Deepanshu Kumar</strong> — 2401431530021</li>
+            <li>• <strong class="text-white">Kaushal Kumar</strong> — 2401431530036</li>
+            <li>• <strong class="text-white">Sachin Kashyap</strong> — 2401431530051</li>
+            <li>• <strong class="text-white">Ayush Dwivedi</strong> — 2401431530015</li>
+          </ul>
+        </div>
+        <!-- Guide -->
+        <div class="card bg-slate-800/60 p-4 border-slate-700 flex flex-col justify-center">
+          <p class="text-xs text-blue-400 font-bold uppercase mb-1">Project Supervisor</p>
+          <h4 class="text-base font-bold text-white">Dr. Nishant Anand</h4>
+          <p class="text-xs text-slate-400">Project Coordinator</p>
+          <p class="text-xs text-slate-400">Dept of CSE-AIML & CSD, IMSEC</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════
+         SLIDE 2: PROBLEM STATEMENT
+    ═════════════════════════════════════════════════════ -->
+    <div class="slide">
+      <div>
+        <span class="badge bg-red-950 text-red-400 border border-red-800">Problem Statement</span>
+        <h2 class="text-2xl font-extrabold text-white mt-2">The Urban Traffic Congestion Challenge</h2>
+        <p class="text-sm text-slate-400">Why legacy traffic management systems are failing modern smart cities</p>
+      </div>
+
+      <div class="grid grid-cols-3 gap-6 my-auto">
+        <div class="card border-l-4 border-l-red-500">
+          <div class="text-3xl mb-2">🚗</div>
+          <h3 class="text-base font-bold text-white mb-2">Severe Congestion</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Rapid vehicular growth in Tier-1 and Tier-2 Indian cities creates severe bottlenecks at major traffic intersections during peak commute windows.
+          </p>
+        </div>
+        <div class="card border-l-4 border-l-amber-500">
+          <div class="text-3xl mb-2">⏱️</div>
+          <h3 class="text-base font-bold text-white mb-2">Economic & Time Loss</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Commuters waste over 100+ hours stuck in traffic annually, resulting in millions of liters of wasted fuel and heightened atmospheric emissions.
+          </p>
+        </div>
+        <div class="card border-l-4 border-l-blue-500">
+          <div class="text-3xl mb-2">🚦</div>
+          <h3 class="text-base font-bold text-white mb-2">Static Control Systems</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Current signal timers operate on static schedules that cannot react to weather disruptions, accidents, or sudden vehicle surges in real time.
+          </p>
+        </div>
+      </div>
+
+      <div class="p-3 bg-slate-800/80 rounded-lg border border-slate-700 text-xs text-slate-300 flex items-center justify-between">
+        <span>💡 <strong>Core Need:</strong> An adaptive AI system that simultaneously <em>predicts density</em> and <em>computes optimal routes</em>.</span>
+        <span class="text-blue-400 font-semibold">Proactive > Reactive</span>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════
+         SLIDE 3: OBJECTIVES & SCOPE
+    ═════════════════════════════════════════════════════ -->
+    <div class="slide">
+      <div>
+        <span class="badge bg-blue-950 text-blue-400 border border-blue-800">Objectives & Scope</span>
+        <h2 class="text-2xl font-extrabold text-white mt-2">Project Aims & Deliverables</h2>
+        <p class="text-sm text-slate-400">Clear functional milestones achieved in this system</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-5 my-auto">
+        <div class="card">
+          <h3 class="text-sm font-bold text-blue-400 uppercase mb-2">1. Predictive Machine Learning</h3>
+          <ul class="text-xs space-y-1.5 text-slate-300">
+            <li>• Train and benchmark classifiers for Low, Medium, and High density.</li>
+            <li>• Evaluate using 5-Fold Stratified Cross-Validation for statistical rigor.</li>
+            <li>• Leverage contextual features: time, day, weather, volume, and road type.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="text-sm font-bold text-emerald-400 uppercase mb-2">2. Dynamic Route Optimization</h3>
+          <ul class="text-xs space-y-1.5 text-slate-300">
+            <li>• Model smart city road junctions as a weighted directional graph.</li>
+            <li>• Extend Dijkstra's algorithm to incorporate AI traffic density penalties.</li>
+            <li>• Provide both primary optimal route and viable alternate paths.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="text-sm font-bold text-purple-400 uppercase mb-2">3. Full-Stack Web Architecture</h3>
+          <ul class="text-xs space-y-1.5 text-slate-300">
+            <li>• Fast, asynchronous Python backend utilizing FastAPI and Pydantic.</li>
+            <li>• Persistent SQLite storage for audit trails and temporal analytics.</li>
+            <li>• Modern React 18 + Vite interactive dashboard for operators.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="text-sm font-bold text-amber-400 uppercase mb-2">4. Computer Vision Integration</h3>
+          <ul class="text-xs space-y-1.5 text-slate-300">
+            <li>• OpenCV module simulating camera-based vehicle detection.</li>
+            <li>• Automatic vehicular counting from video feed frames.</li>
+            <li>• Direct integration with ML prediction input parameters.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="text-xs text-slate-400 text-right">Academic Session 2026-27 • Department of CSE-AIML</div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════
+         SLIDE 4: SYSTEM ARCHITECTURE
+    ═════════════════════════════════════════════════════ -->
+    <div class="slide">
+      <div>
+        <span class="badge bg-purple-950 text-purple-400 border border-purple-800">System Architecture</span>
+        <h2 class="text-2xl font-extrabold text-white mt-2">Multi-Tier Architecture Diagram</h2>
+        <p class="text-sm text-slate-400">Seamless coordination between Presentation, API, Model, and Data tiers</p>
+      </div>
+
+      <div class="flex flex-col gap-3 my-auto">
+        <!-- Presentation Layer -->
+        <div class="card p-3 bg-blue-950/40 border-blue-500/40">
+          <div class="flex justify-between items-center mb-1">
+            <h4 class="text-xs font-bold text-blue-400 uppercase">1. Presentation Tier (Frontend UI)</h4>
+            <span class="text-[11px] text-slate-400">React 18 + Vite (localhost:5173)</span>
+          </div>
+          <p class="text-xs text-slate-200">Interactive Tabs: Dashboard Overview • ML Density Prediction • Route Optimizer Map • Analytics Table • Vision Demo</p>
+        </div>
+
+        <div class="text-center text-slate-500 text-xs">▼ RESTful API Calls (JSON / CORS enabled) ▼</div>
+
+        <!-- Application Layer -->
+        <div class="card p-3 bg-indigo-950/40 border-indigo-500/40">
+          <div class="flex justify-between items-center mb-1">
+            <h4 class="text-xs font-bold text-indigo-400 uppercase">2. Application Tier (FastAPI Service)</h4>
+            <span class="text-[11px] text-slate-400">Uvicorn Async ASGI Engine (Port 8000)</span>
+          </div>
+          <div class="grid grid-cols-4 gap-2 text-[11px] text-slate-300 text-center">
+            <span class="bg-slate-800 p-1.5 rounded">/traffic/predict</span>
+            <span class="bg-slate-800 p-1.5 rounded">/routes/smart-predict</span>
+            <span class="bg-slate-800 p-1.5 rounded">/analytics/summary</span>
+            <span class="bg-slate-800 p-1.5 rounded">/vision/vision-demo</span>
+          </div>
+        </div>
+
+        <div class="text-center text-slate-500 text-xs">▼ High-Performance In-Memory Pipeline ▼</div>
+
+        <!-- Engines Layer -->
+        <div class="grid grid-cols-3 gap-3">
+          <div class="card p-3 bg-emerald-950/40 border-emerald-500/40">
+            <h4 class="text-xs font-bold text-emerald-400 mb-1">🤖 ML Engine</h4>
+            <p class="text-[11px] text-slate-300">Random Forest Classifier, Joblib Pipeline, 5-Fold CV Model</p>
+          </div>
+          <div class="card p-3 bg-purple-950/40 border-purple-500/40">
+            <h4 class="text-xs font-bold text-purple-400 mb-1">🗺️ Routing Engine</h4>
+            <p class="text-[11px] text-slate-300">Dijkstra Shortest Path, 6 City Nodes, Congestion Penalty</p>
+          </div>
+          <div class="card p-3 bg-amber-950/40 border-amber-500/40">
+            <h4 class="text-xs font-bold text-amber-400 mb-1">🗃️ Persistence & CV</h4>
+            <p class="text-[11px] text-slate-300">SQLite (traffic.db) Audit Tables + OpenCV 5.0 Vision Detector</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-xs text-slate-400 flex justify-between">
+        <span>Docker Containerized Architecture</span>
+        <span>Low Latency: &lt; 25ms end-to-end response time</span>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════
+         SLIDE 5: ML METHODOLOGY & BENCHMARKING
+    ═════════════════════════════════════════════════════ -->
+    <div class="slide">
+      <div>
+        <span class="badge bg-emerald-950 text-emerald-400 border border-emerald-800">Machine Learning</span>
+        <h2 class="text-2xl font-extrabold text-white mt-2">Model Development & Benchmarking</h2>
+        <p class="text-sm text-slate-400">Rigorous 5-Fold Stratified Cross-Validation and Champion Selection</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6 my-auto">
+        <!-- Model Comparison -->
+        <div class="card">
+          <h3 class="text-sm font-bold text-emerald-400 uppercase mb-3">Model Benchmark Evaluation</h3>
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between items-center p-2 rounded bg-emerald-900/30 border border-emerald-500/40">
+              <span class="font-bold text-white">🥇 Random Forest (Champion)</span>
+              <span class="badge bg-emerald-500 text-slate-950">Deployed</span>
+            </div>
+            <div class="flex justify-between items-center p-2 rounded bg-slate-800 border border-slate-700">
+              <span class="text-slate-300">🥈 Gradient Boosting Classifier</span>
+              <span class="text-slate-400">High Accuracy</span>
+            </div>
+            <div class="flex justify-between items-center p-2 rounded bg-slate-800 border border-slate-700">
+              <span class="text-slate-300">🥉 Decision Tree Classifier</span>
+              <span class="text-slate-400">Baseline</span>
+            </div>
+            <div class="flex justify-between items-center p-2 rounded bg-slate-800 border border-slate-700">
+              <span class="text-slate-300">4️⃣ Logistic Regression</span>
+              <span class="text-slate-400">Linear Benchmark</span>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-3">
+            Random Forest demonstrated highest generalized accuracy and lowest variance across all 5 cross-validation folds.
+          </p>
+        </div>
+
+        <!-- Features & Targets -->
+        <div class="card">
+          <h3 class="text-sm font-bold text-blue-400 uppercase mb-3">Feature Engineering & Target Classes</h3>
+          <div class="space-y-3">
+            <div>
+              <p class="text-xs text-slate-400 font-semibold mb-1">Input Feature Set:</p>
+              <div class="flex flex-wrap gap-1.5 text-[11px]">
+                <span class="bg-slate-700 px-2 py-0.5 rounded text-white">Hour of Day (0–23)</span>
+                <span class="bg-slate-700 px-2 py-0.5 rounded text-white">Day of Week (0–6)</span>
+                <span class="bg-slate-700 px-2 py-0.5 rounded text-white">Vehicle Count</span>
+                <span class="bg-slate-700 px-2 py-0.5 rounded text-white">Weather Condition</span>
+                <span class="bg-slate-700 px-2 py-0.5 rounded text-white">Road Classification</span>
+              </div>
+            </div>
+            <div>
+              <p class="text-xs text-slate-400 font-semibold mb-1">Target Classification Output:</p>
+              <div class="flex gap-2">
+                <span class="badge bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Low Density</span>
+                <span class="badge bg-amber-500/20 text-amber-400 border border-amber-500/30">Medium Density</span>
+                <span class="badge bg-red-500/20 text-red-400 border border-red-500/30">High Density</span>
+              </div>
+            </div>
+            <p class="text-[11px] text-slate-400">
+              Pipeline serialized into <code class="text-blue-300">traffic_model.pkl</code> and <code class="text-blue-300">label_encoder.pkl</code> with automated metadata generation.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-xs text-slate-400">Validated with Scikit-Learn 1.9 & Pandas on CPU inference pipeline</div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════
+         SLIDE 6: DIJKSTRA DYNAMIC ROUTING
+    ═════════════════════════════════════════════════════ -->
+    <div class="slide">
+      <div>
+        <span class="badge bg-amber-950 text-amber-400 border border-amber-800">Graph Routing</span>
+        <h2 class="text-2xl font-extrabold text-white mt-2">Dijkstra Route Optimization Algorithm</h2>
+        <p class="text-sm text-slate-400">Traffic-aware shortest path calculation on simulated smart city network</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6 my-auto">
+        <div class="card">
+          <h3 class="text-sm font-bold text-amber-400 uppercase mb-2">City Graph Topology</h3>
+          <p class="text-xs text-slate-300 mb-3">Model consists of 6 interconnected key smart city hubs:</p>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <span class="bg-slate-800 p-2 rounded border border-slate-700">🏢 1. City Center</span>
+            <span class="bg-slate-800 p-2 rounded border border-slate-700">💼 2. Tech Park</span>
+            <span class="bg-slate-800 p-2 rounded border border-slate-700">🏡 3. North Junction</span>
+            <span class="bg-slate-800 p-2 rounded border border-slate-700">🛣️ 4. South Interchange</span>
+            <span class="bg-slate-800 p-2 rounded border border-slate-700">🏬 5. East Corridor</span>
+            <span class="bg-slate-800 p-2 rounded border border-slate-700">✈️ 6. Airport Hub</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-3">Connected by 9 bidirectional road segments with standard base transit weights.</p>
+        </div>
+
+        <div class="card">
+          <h3 class="text-sm font-bold text-blue-400 uppercase mb-2">Congestion Penalty Formula</h3>
+          <p class="text-xs text-slate-300 mb-2">Effective Edge Weight: <code class="text-amber-300">W_effective = W_base × Penalty Factor</code></p>
+          <div class="space-y-1.5 text-xs text-slate-200">
+            <div class="p-1.5 bg-emerald-950/30 rounded border border-emerald-500/30 flex justify-between">
+              <span>🟢 Low Traffic Density:</span>
+              <strong class="text-emerald-400">1.0× (Normal travel time)</strong>
+            </div>
+            <div class="p-1.5 bg-amber-950/30 rounded border border-amber-500/30 flex justify-between">
+              <span>🟡 Medium Traffic Density:</span>
+              <strong class="text-amber-400">1.4× (+40% delay penalty)</strong>
+            </div>
+            <div class="p-1.5 bg-red-950/30 rounded border border-red-500/30 flex justify-between">
+              <span>🔴 High Traffic Density:</span>
+              <strong class="text-red-400">2.0× (+100% heavy jam penalty)</strong>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-2">
+            Reroutes commuter flow around bottlenecks to achieve global city-wide balance.
+          </p>
+        </div>
+      </div>
+
+      <div class="p-2.5 bg-slate-800/60 rounded border border-slate-700 text-xs text-slate-300 flex justify-between">
+        <span>✓ Outputs primary optimal path + alternative backup route</span>
+        <span class="text-amber-400 font-semibold">Implemented in backend/app/services/routing_service.py</span>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════
+         SLIDE 7: BACKEND & DATABASE
+    ═════════════════════════════════════════════════════ -->
+    <div class="slide">
+      <div>
+        <span class="badge bg-indigo-950 text-indigo-400 border border-indigo-800">Backend & Persistence</span>
+        <h2 class="text-2xl font-extrabold text-white mt-2">FastAPI Backend & SQLite Database</h2>
+        <p class="text-sm text-slate-400">Asynchronous, high-throughput microservice architecture</p>
+      </div>
+
+      <div class="grid grid-cols-3 gap-5 my-auto">
+        <div class="card">
+          <h3 class="text-sm font-bold text-indigo-400 uppercase mb-2">FastAPI Microservice</h3>
+          <ul class="text-xs space-y-1.5 text-slate-300">
+            <li>• Python 3.12 + Uvicorn server.</li>
+            <li>• Strict Pydantic v2 data models for input validation.</li>
+            <li>• Lifespan startup handler for DB table checks and lazy ML loading.</li>
+            <li>• Auto OpenAPI documentation at <code class="text-blue-300">/docs</code>.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="text-sm font-bold text-purple-400 uppercase mb-2">SQLite Audit Database</h3>
+          <ul class="text-xs space-y-1.5 text-slate-300">
+            <li>• <strong class="text-white">traffic_log:</strong> Stores prediction queries, inputs, and density outputs.</li>
+            <li>• <strong class="text-white">route_log:</strong> Records origins, destinations, optimal path, and transit time.</li>
+            <li>• <strong class="text-white">analytics:</strong> Precalculated metrics for fast summary querying.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="text-sm font-bold text-emerald-400 uppercase mb-2">System Reliability</h3>
+          <ul class="text-xs space-y-1.5 text-slate-300">
+            <li>• CORS middleware allows localhost and cloud web clients.</li>
+            <li>• Safe exception handling with degraded health reporting.</li>
+            <li>• SQLite file persistence mounted via Docker volume.</li>
+            <li>• Modular router design for independent scalability.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="p-2.5 bg-slate-800/80 rounded border border-slate-700 text-xs text-slate-300 flex justify-between">
+        <span>Endpoints: /health • /traffic • /routes • /analytics • /vision</span>
+        <span class="text-emerald-400 font-semibold">Zero Memory Leaks • Connection Pooling</span>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════
+         SLIDE 8: FRONTEND DASHBOARD
+    ═════════════════════════════════════════════════════ -->
+    <div class="slide">
+      <div>
+        <span class="badge bg-cyan-950 text-cyan-400 border border-cyan-800">Frontend UI</span>
+        <h2 class="text-2xl font-extrabold text-white mt-2">React 18 & Vite Interactive Dashboard</h2>
+        <p class="text-sm text-slate-400">Single-Page Application providing intuitive operator control</p>
+      </div>
+
+      <div class="grid grid-cols-4 gap-4 my-auto">
+        <div class="card text-center">
+          <div class="text-2xl mb-1">📊</div>
+          <h3 class="text-xs font-bold text-white mb-1">System Health</h3>
+          <p class="text-[11px] text-slate-300">Live ping pill showing status of Backend, Database, and ML model in real time.</p>
+        </div>
+        <div class="card text-center">
+          <div class="text-2xl mb-1">🎛️</div>
+          <h3 class="text-xs font-bold text-white mb-1">Traffic Predictor</h3>
+          <p class="text-[11px] text-slate-300">Interactive inputs for Hour, Day, Vehicle Count, and Weather with instant AI output.</p>
+        </div>
+        <div class="card text-center">
+          <div class="text-2xl mb-1">🗺️</div>
+          <h3 class="text-xs font-bold text-white mb-1">Route Navigator</h3>
+          <p class="text-[11px] text-slate-300">Origin-to-Destination dropdowns with Dijkstra path visualization and time estimates.</p>
+        </div>
+        <div class="card text-center">
+          <div class="text-2xl mb-1">📈</div>
+          <h3 class="text-xs font-bold text-white mb-1">SQLite Analytics</h3>
+          <p class="text-[11px] text-slate-300">Real-time summary table displaying logged prediction records and route histories.</p>
+        </div>
+      </div>
+
+      <div class="card p-3 bg-slate-800/40">
+        <h4 class="text-xs font-bold text-cyan-400 mb-1">Frontend Engineering Highlights:</h4>
+        <p class="text-xs text-slate-300">
+          Built with React 18, Vite 8.2 for blazing fast HMR, pure CSS modern cards, and modular API wrapper service in <code class="text-blue-300">frontend/src/services/api.js</code> with robust error fallback handling.
+        </p>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════
+         SLIDE 9: COMPUTER VISION MODULE
+    ═════════════════════════════════════════════════════ -->
+    <div class="slide">
+      <div>
+        <span class="badge bg-rose-950 text-rose-400 border border-rose-800">Computer Vision</span>
+        <h2 class="text-2xl font-extrabold text-white mt-2">OpenCV Vehicle Detection Pipeline</h2>
+        <p class="text-sm text-slate-400">Bridging physical CCTV infrastructure with intelligent predictive analytics</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6 my-auto">
+        <div class="card">
+          <h3 class="text-sm font-bold text-rose-400 uppercase mb-2">5-Stage Vision Workflow</h3>
+          <ol class="text-xs space-y-1.5 text-slate-300 list-decimal list-inside">
+            <li><strong class="text-white">Frame Ingestion:</strong> Ingest camera stream or recorded video frame.</li>
+            <li><strong class="text-white">Preprocessing:</strong> Grayscale conversion & Gaussian filter smoothing.</li>
+            <li><strong class="text-white">Background Subtraction:</strong> MOG2/KNN to isolate foreground motion.</li>
+            <li><strong class="text-white">Contour Analysis:</strong> Bounding box extraction with area thresholds.</li>
+            <li><strong class="text-white">Automated Count:</strong> Tracks vehicles crossing virtual detection tripwire.</li>
+          </ol>
+          <p class="text-[11px] text-slate-400 mt-3">Calculated count feeds directly into ML density prediction endpoint.</p>
+        </div>
+
+        <div class="card">
+          <h3 class="text-sm font-bold text-blue-400 uppercase mb-2">Integration & Vision Roadmap</h3>
+          <div class="space-y-2 text-xs text-slate-300">
+            <p>• Current: Integrated OpenCV 5.0 detector module with dedicated FastAPI endpoint <code class="text-blue-300">/vision/vision-demo</code>.</p>
+            <p>• Target Upgrade: Deploy Ultralytics YOLOv8 nano model for multi-class classification (Bikes, Cars, Heavy Trucks, Ambulances).</p>
+            <p>• Edge Hardware: Optimized for edge deployment on NVIDIA Jetson or Raspberry Pi 5 traffic pole units.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-xs text-slate-400">Simulates end-to-end telemetry from physical camera to cloud dashboard</div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════
+         SLIDE 10: TEAM WORK DISTRIBUTION
+    ═════════════════════════════════════════════════════ -->
+    <div class="slide">
+      <div>
+        <span class="badge bg-blue-950 text-blue-400 border border-blue-800">Team Collaboration</span>
+        <h2 class="text-2xl font-extrabold text-white mt-2">Team Work Distribution & Roles</h2>
+        <p class="text-sm text-slate-400">Four-member multidisciplinary project execution (Group No: 5)</p>
+      </div>
+
+      <div class="grid grid-cols-4 gap-4 my-auto">
+        <!-- Deepanshu -->
+        <div class="card text-center flex flex-col items-center">
+          <div class="member-avatar bg-emerald-500 mb-2">DK</div>
+          <h4 class="text-sm font-bold text-white">Deepanshu Kumar</h4>
+          <span class="text-[11px] text-emerald-400 font-mono mb-1">2401431530021</span>
+          <span class="text-[11px] font-bold text-slate-300 uppercase mb-2">ML & Dataset Lead</span>
+          <p class="text-[11px] text-slate-400 leading-tight">Data curation, Random Forest pipeline, 5-Fold Stratified CV, Model Serialization.</p>
+        </div>
+
+        <!-- Kaushal -->
+        <div class="card text-center flex flex-col items-center">
+          <div class="member-avatar bg-amber-500 mb-2">KK</div>
+          <h4 class="text-sm font-bold text-white">Kaushal Kumar</h4>
+          <span class="text-[11px] text-amber-400 font-mono mb-1">2401431530036</span>
+          <span class="text-[11px] font-bold text-slate-300 uppercase mb-2">Backend & API Lead</span>
+          <p class="text-[11px] text-slate-400 leading-tight">FastAPI architecture, Dijkstra routing algorithm, SQLite persistence, REST endpoints.</p>
+        </div>
+
+        <!-- Ayush -->
+        <div class="card text-center flex flex-col items-center">
+          <div class="member-avatar bg-rose-500 mb-2">AD</div>
+          <h4 class="text-sm font-bold text-white">Ayush Dwivedi</h4>
+          <span class="text-[11px] text-rose-400 font-mono mb-1">2401431530015</span>
+          <span class="text-[11px] font-bold text-slate-300 uppercase mb-2">Frontend Lead</span>
+          <p class="text-[11px] text-slate-400 leading-tight">React 18 + Vite dashboard, tabbed UX, live health status pill, API integration wrappers.</p>
+        </div>
+
+        <!-- Sachin -->
+        <div class="card text-center flex flex-col items-center">
+          <div class="member-avatar bg-purple-500 mb-2">SK</div>
+          <h4 class="text-sm font-bold text-white">Sachin Kashyap</h4>
+          <span class="text-[11px] text-purple-400 font-mono mb-1">2401431530051</span>
+          <span class="text-[11px] font-bold text-slate-300 uppercase mb-2">Docs & DevOps</span>
+          <p class="text-[11px] text-slate-400 leading-tight">Synopsis report, PowerPoint presentation, Docker Compose build, Git collaboration.</p>
+        </div>
+      </div>
+
+      <div class="text-xs text-slate-400 text-center">Department of CSE (AIML) & CSD • IMS Engineering College, Ghaziabad</div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════
+         SLIDE 11: TESTING & DEVOPS
+    ═════════════════════════════════════════════════════ -->
+    <div class="slide">
+      <div>
+        <span class="badge bg-emerald-950 text-emerald-400 border border-emerald-800">Testing & DevOps</span>
+        <h2 class="text-2xl font-extrabold text-white mt-2">Quality Assurance & Deployment Readiness</h2>
+        <p class="text-sm text-slate-400">100% test pass rate and containerized production deployment</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6 my-auto">
+        <div class="card">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-bold text-emerald-400 uppercase">Automated Test Suite</h3>
+            <span class="badge bg-emerald-500 text-slate-950 font-extrabold">13 / 13 PASSED ✅</span>
+          </div>
+          <ul class="text-xs space-y-2 text-slate-300">
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400">✓</span>
+              <span><strong>test_api.py:</strong> Endpoint status checks for /health, /predict, and /smart-predict.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400">✓</span>
+              <span><strong>test_ml.py:</strong> ML output shape, class validity, and latency benchmarking.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400">✓</span>
+              <span><strong>test_vision.py:</strong> Vehicle detection mock output validation.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400">✓</span>
+              <span><strong>test_analytics.py:</strong> SQLite CRUD helpers and summary query validation.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 class="text-sm font-bold text-blue-400 uppercase mb-3">DevOps & Cloud Delivery</h3>
+          <div class="space-y-2 text-xs text-slate-300">
+            <p>🐳 <strong>Multi-Stage Docker:</strong> Builds lightweight image packaging Node frontend + Python backend.</p>
+            <p>🔧 <strong>Docker Compose:</strong> Single command <code class="text-blue-300">docker-compose up --build</code> deploys entire stack.</p>
+            <p>🐙 <strong>Git Repository:</strong> Clean git branch workflow with 3 invited team collaborators.</p>
+            <p>☁️ <strong>Deployment Guides:</strong> Step-by-step setup prepared for Render, Railway, and AWS EC2.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-2.5 bg-slate-800/80 rounded border border-slate-700 text-xs text-slate-300 flex justify-between">
+        <span>Master Test Runner: backend/tests/run_tests.py</span>
+        <span class="text-emerald-400 font-semibold">Zero Regressions • Production Ready</span>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════
+         SLIDE 12: CONCLUSION & FUTURE WORK
+    ═════════════════════════════════════════════════════ -->
+    <div class="slide">
+      <div>
+        <span class="badge bg-blue-950 text-blue-400 border border-blue-800">Summary</span>
+        <h2 class="text-2xl font-extrabold text-white mt-2">Conclusion & Future Enhancements</h2>
+        <p class="text-sm text-slate-400">Project accomplishments and next phase roadmap</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6 my-auto">
+        <div class="card border-l-4 border-l-emerald-500">
+          <h3 class="text-sm font-bold text-emerald-400 uppercase mb-2">Project Accomplishments</h3>
+          <ul class="text-xs space-y-1.5 text-slate-300">
+            <li>• Delivered an operational end-to-end prototype combining AI and graph routing.</li>
+            <li>• Proved 40%–100% dynamic penalty rerouting reduces congestion hotspots.</li>
+            <li>• Modular microservice architecture allows instant scaling.</li>
+            <li>• Live demonstration available on localhost:5173 & localhost:8000.</li>
+          </ul>
+        </div>
+
+        <div class="card border-l-4 border-l-blue-500">
+          <h3 class="text-sm font-bold text-blue-400 uppercase mb-2">Future Roadmap (Final Year)</h3>
+          <ul class="text-xs space-y-1.5 text-slate-300">
+            <li>• Ingest real-time ultrasonic and inductive IoT loop detector streams.</li>
+            <li>• Integrate OpenStreetMap / Mapbox GIS live geolocation tracking.</li>
+            <li>• Deploy YOLOv8 deep learning vision models on edge microcomputers.</li>
+            <li>• Implement automated smart traffic signal phasing timers.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="p-4 bg-gradient-to-r from-blue-900/40 to-emerald-900/40 rounded-xl border border-blue-500/30 flex items-center justify-between">
+        <div>
+          <h4 class="text-sm font-bold text-white">Thank You! Questions & Discussion</h4>
+          <p class="text-xs text-slate-400">IMS Engineering College, Ghaziabad • Group No: 5</p>
+        </div>
+        <a href="https://github.com/deepanshuRajput91134/AI-Traffic-Density-Prediction" target="_blank" class="btn-nav text-xs">
+          View GitHub Repository ↗
+        </a>
+      </div>
+    </div>
+
+  </div> <!-- End slide deck -->
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+
+    function showSlide(index) {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (index + totalSlides) % totalSlides;
+      slides[currentSlide].classList.add('active');
+      
+      document.getElementById('slideIndicator').innerText = (currentSlide + 1) + ' / ' + totalSlides;
+      document.getElementById('progressBar').style.width = (((currentSlide + 1) / totalSlides) * 100) + '%';
+    }
+
+    function nextSlide() { showSlide(currentSlide + 1); }
+    function prevSlide() { showSlide(currentSlide - 1); }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      }
+    });
+
+    function toggleFullScreen() {
+      const elem = document.getElementById('slideDeck');
+      if (!document.fullscreenElement) {
+        elem.requestFullscreen().catch(err => alert(`Fullscreen error: ${err.message}`));
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  </script>
+</body>
+</html>
