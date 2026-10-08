@@ -97,6 +97,9 @@ def health_check():
 
 
 # Mount modular routers
+from routes.vision import router as vision_router
+
 app.include_router(traffic_router)
 app.include_router(routes_router)
 app.include_router(analytics_router)
+app.include_router(vision_router)

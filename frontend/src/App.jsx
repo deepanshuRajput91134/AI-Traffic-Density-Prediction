@@ -162,6 +162,14 @@ export default function App() {
     }
   };
 
+  const handleSwapNodes = () => {
+    const newOrigin = destination;
+    const newDest = origin;
+    setOrigin(newOrigin);
+    setDestination(newDest);
+    handleRouteOptimize(newOrigin, newDest);
+  };
+
   // 5. Trigger Preset Simulation Scenario
   const handleTriggerScenario = async (type) => {
     try {
@@ -688,52 +696,124 @@ export default function App() {
                   </span>
                 </div>
 
-                <div className="form-grid">
+                <div className="form-grid" style={{ alignItems: "flex-end" }}>
                   <div className="form-group">
-                    <label className="form-label">Origin Intersection (Start Point)</label>
+                    <label className="form-label" style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                      <span>📍</span>
+                      <span>Kahan Se (Origin / Start Point)</span>
+                    </label>
                     <select
                       className="form-select"
                       value={origin}
                       onChange={(e) => setOrigin(e.target.value)}
                     >
-                      <option value="N1">Central City Center (N1)</option>
-                      <option value="N2">Cyber Tech Park (N2)</option>
-                      <option value="N3">North Metro Junction (N3)</option>
-                      <option value="N4">South Ring Interchange (N4)</option>
-                      <option value="N5">East Logistics Corridor (N5)</option>
+                      <option value="N1">Central City Center (N1) - CBD</option>
+                      <option value="N2">Cyber Tech Park (N2) - IT Hub</option>
+                      <option value="N3">North Metro Junction (N3) - Transit</option>
+                      <option value="N4">South Ring Interchange (N4) - Expressway</option>
+                      <option value="N5">East Logistics Corridor (N5) - Industrial</option>
+                      <option value="N6">International Airport (N6) - Terminal</option>
                     </select>
                   </div>
 
+                  <div className="form-group" style={{ display: "flex", justifyContent: "center" }}>
+                    <button
+                      type="button"
+                      className="btn-secondary"
+                      onClick={handleSwapNodes}
+                      title="Swap Start and Destination"
+                      style={{ padding: "10px 16px", display: "flex", alignItems: "center", gap: 6 }}
+                    >
+                      <span>⇄</span>
+                      <span>Swap</span>
+                    </button>
+                  </div>
+
                   <div className="form-group">
-                    <label className="form-label">Destination Node (Target Point)</label>
+                    <label className="form-label" style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                      <span>🏁</span>
+                      <span>Kahan Tak (Destination / End Point)</span>
+                    </label>
                     <select
                       className="form-select"
                       value={destination}
                       onChange={(e) => setDestination(e.target.value)}
                     >
-                      <option value="N6">International Airport (N6)</option>
-                      <option value="N5">East Logistics Corridor (N5)</option>
-                      <option value="N4">South Ring Interchange (N4)</option>
-                      <option value="N2">Cyber Tech Park (N2)</option>
+                      <option value="N1">Central City Center (N1) - CBD</option>
+                      <option value="N2">Cyber Tech Park (N2) - IT Hub</option>
+                      <option value="N3">North Metro Junction (N3) - Transit</option>
+                      <option value="N4">South Ring Interchange (N4) - Expressway</option>
+                      <option value="N5">East Logistics Corridor (N5) - Industrial</option>
+                      <option value="N6">International Airport (N6) - Terminal</option>
                     </select>
                   </div>
                 </div>
 
+                {origin === destination && (
+                  <div style={{ padding: "10px 14px", background: "rgba(245, 158, 11, 0.15)", border: "1px solid rgba(245, 158, 11, 0.4)", borderRadius: 8, fontSize: 13, color: "#fbbf24", marginBottom: 16 }}>
+                    ⚠️ Origin aur Destination same hain! Kripya alag-alag locations select karein.
+                  </div>
+                )}
+
                 <button
                   className="btn-primary"
                   onClick={() => handleRouteOptimize(origin, destination)}
-                  disabled={loadingRoute}
+                  disabled={loadingRoute || origin === destination}
+                  style={{ width: "100%", padding: "14px", fontSize: 15 }}
                 >
-                  <Navigation size={16} />
-                  <span>{loadingRoute ? "Computing Paths..." : "Find Optimal Route (Dijkstra)"}</span>
+                  <Navigation size={18} />
+                  <span>{loadingRoute ? "AI Dijkstra Path Calculating..." : "🚗 Find Best Route (Kahan Se Kahan Tak)"}</span>
                 </button>
               </div>
 
-              {/* Ranked Routes Carousel / List */}
+              {/* Journey Overview Banner */}
               {routeResult && (
                 <div>
-                  <div style={{ marginBottom: 16, fontSize: 15, fontWeight: 700, color: "#fff" }}>
-                    Ranked Pathfinding Solutions:
+                  <div
+                    className="panel-card"
+                    style={{
+                      background: "linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98))",
+                      border: "1px solid rgba(59, 130, 246, 0.4)",
+                      marginBottom: 20,
+                    }}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 14 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                        <div style={{ width: 48, height: 48, borderRadius: 12, background: "rgba(59, 130, 246, 0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>
+                          🚗
+                        </div>
+                        <div>
+                          <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, color: "#94a3b8" }}>
+                            Journey Overview (Kahan Se Kahan Tak)
+                          </div>
+                          <div style={{ fontSize: 18, fontWeight: 800, color: "#fff", display: "flex", alignItems: "center", gap: 10, marginTop: 4 }}>
+                            <span style={{ color: "#38bdf8" }}>{routeResult.origin?.name || origin}</span>
+                            <span style={{ color: "#f59e0b", fontSize: 18 }}>➔</span>
+                            <span style={{ color: "#a78bfa" }}>{routeResult.destination?.name || destination}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+                        <div style={{ textAlign: "right" }}>
+                          <div style={{ fontSize: 11, color: "#94a3b8" }}>Optimal Travel Time</div>
+                          <div style={{ fontSize: 22, fontWeight: 800, color: "#10b981" }}>
+                            {routeResult.recommended_route?.estimated_travel_time} <span style={{ fontSize: 14 }}>min</span>
+                          </div>
+                        </div>
+                        <div style={{ textAlign: "right" }}>
+                          <div style={{ fontSize: 11, color: "#94a3b8" }}>Total Distance</div>
+                          <div style={{ fontSize: 22, fontWeight: 800, color: "#38bdf8" }}>
+                            {routeResult.recommended_route?.total_distance_km} <span style={{ fontSize: 14 }}>km</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: 16, fontSize: 16, fontWeight: 700, color: "#fff", display: "flex", alignItems: "center", gap: 8 }}>
+                    <span>🗺️</span>
+                    <span>Ranked AI Pathfinding Solutions:</span>
                   </div>
 
                   {routeResult.all_ranked_routes?.map((route, idx) => (
@@ -741,40 +821,47 @@ export default function App() {
                       key={idx}
                       className="panel-card"
                       style={{
-                        borderLeft: `4px solid ${
+                        borderLeft: `5px solid ${
                           idx === 0 ? "#10b981" : idx === 1 ? "#f59e0b" : "#ef4444"
                         }`,
                         marginBottom: 16,
+                        background: idx === 0 ? "rgba(16, 185, 129, 0.05)" : "var(--bg-card)",
                       }}
                     >
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
                         <div>
-                          <div style={{ fontSize: 16, fontWeight: 700, color: "#fff", display: "flex", gap: 10, alignItems: "center" }}>
-                            <span>{route.label}</span>
+                          <div style={{ fontSize: 16, fontWeight: 800, color: "#fff", display: "flex", gap: 10, alignItems: "center" }}>
+                            <span>{idx === 0 ? "🥇 " : idx === 1 ? "🥈 " : "🥉 "}{route.label}</span>
+                            {idx === 0 && (
+                              <span style={{ fontSize: 11, padding: "2px 8px", background: "#10b981", color: "#000", fontWeight: 800, borderRadius: 4 }}>
+                                RECOMMENDED
+                              </span>
+                            )}
                             <span className={`badge-density ${getDensityClass(route.traffic_density)}`}>
-                              {route.traffic_density} Traffic
+                              ● {route.traffic_density} Traffic
                             </span>
                           </div>
-                          <div style={{ fontSize: 13, color: "#94a3b8", marginTop: 4 }}>
-                            {route.path_names?.join(" → ")}
+                          <div style={{ fontSize: 14, fontWeight: 600, color: "#38bdf8", marginTop: 6, display: "flex", alignItems: "center", gap: 6 }}>
+                            <span>Path:</span>
+                            <span>{route.path_names?.join(" ➔ ")}</span>
                           </div>
                         </div>
 
                         <div style={{ display: "flex", gap: 24, textAlign: "right" }}>
                           <div>
-                            <div style={{ fontSize: 12, color: "#94a3b8" }}>Travel Time</div>
-                            <div style={{ fontSize: 20, fontWeight: 700, color: "#fff" }}>
+                            <div style={{ fontSize: 11, color: "#94a3b8" }}>Travel Time</div>
+                            <div style={{ fontSize: 20, fontWeight: 700, color: idx === 0 ? "#10b981" : "#f1f5f9" }}>
                               {route.estimated_travel_time} min
                             </div>
                           </div>
                           <div>
-                            <div style={{ fontSize: 12, color: "#94a3b8" }}>Distance</div>
-                            <div style={{ fontSize: 20, fontWeight: 700, color: "#fff" }}>
+                            <div style={{ fontSize: 11, color: "#94a3b8" }}>Distance</div>
+                            <div style={{ fontSize: 20, fontWeight: 700, color: "#f1f5f9" }}>
                               {route.total_distance_km} km
                             </div>
                           </div>
                           <div>
-                            <div style={{ fontSize: 12, color: "#94a3b8" }}>Composite Score</div>
+                            <div style={{ fontSize: 11, color: "#94a3b8" }}>AI Score</div>
                             <div style={{ fontSize: 20, fontWeight: 700, color: "#38bdf8" }}>
                               {route.route_score}
                             </div>
@@ -782,8 +869,56 @@ export default function App() {
                         </div>
                       </div>
 
-                      <div style={{ marginTop: 14, fontSize: 13, color: "#cbd5e1", background: "rgba(0,0,0,0.2)", padding: 10, borderRadius: 6 }}>
-                        💡 <strong>Reason for selection:</strong> {route.reason}
+                      {/* Turn-by-Turn Road Segment Breakdown */}
+                      {route.segments && route.segments.length > 0 && (
+                        <div style={{ marginTop: 14, borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 12 }}>
+                          <div style={{ fontSize: 12, fontWeight: 700, color: "#94a3b8", marginBottom: 8 }}>
+                            🛣️ Step-by-Step Road Navigation:
+                          </div>
+                          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                            {route.segments.map((seg, sIdx) => (
+                              <div
+                                key={sIdx}
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                  background: "rgba(0,0,0,0.25)",
+                                  padding: "8px 12px",
+                                  borderRadius: 6,
+                                  fontSize: 12,
+                                }}
+                              >
+                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                  <span style={{ color: "#38bdf8", fontWeight: 700 }}>Step {sIdx + 1}:</span>
+                                  <span style={{ color: "#f1f5f9", fontWeight: 600 }}>{seg.name}</span>
+                                  <span style={{ color: "#64748b" }}>({seg.road_type})</span>
+                                </div>
+                                <div style={{ display: "flex", gap: 14, color: "#94a3b8" }}>
+                                  <span>📏 {seg.distance_km} km</span>
+                                  <span>⏱️ ~{seg.travel_time_min} min</span>
+                                  <span
+                                    style={{
+                                      color:
+                                        seg.density === "Low"
+                                          ? "#10b981"
+                                          : seg.density === "Medium"
+                                          ? "#f59e0b"
+                                          : "#ef4444",
+                                      fontWeight: 600,
+                                    }}
+                                  >
+                                    ● {seg.density} Traffic
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      <div style={{ marginTop: 14, fontSize: 12, color: "#cbd5e1", background: "rgba(0,0,0,0.2)", padding: 10, borderRadius: 6 }}>
+                        💡 <strong>AI Rationale:</strong> {route.reason}
                       </div>
                     </div>
                   ))}
